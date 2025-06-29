@@ -21,6 +21,7 @@ public class GunController : MonoBehaviour
 
     [SerializeField]
     private Camera theCam;
+    private Crosshair crosshair;
 
     [SerializeField]
     private GameObject hitEffectPrefab;
@@ -29,6 +30,10 @@ public class GunController : MonoBehaviour
     {
         originPos = Vector3.zero;
         audioSource = GetComponent<AudioSource>();
+        crosshair = FindFirstObjectByType<Crosshair>();
+
+        WeaponManager.currentWeapon = currentGun.GetComponent<Transform>();
+        WeaponManager.currentWeaponAnim = currentGun.anim;
     }
 
     // Update is called once per frame
@@ -75,6 +80,7 @@ public class GunController : MonoBehaviour
 
     private void Shoot()
     {
+        crosshair.FireAnimation();
         currentGun.currentBulletCount--;
         currentFireRate = currentGun.fireRate;
         PlaySE(currentGun.fireSound);
@@ -86,7 +92,10 @@ public class GunController : MonoBehaviour
 
     private void Hit()
     {
-        if (Physics.Raycast(theCam.transform.position, theCam.transform.forward, out hitInfo, currentGun.range))
+        if (Physics.Raycast(theCam.transform.position, theCam.transform.forward 
+            + new Vector3(Random.Range(-crosshair.GetAccuracy() - currentGun.accuracy, crosshair.GetAccuracy() + currentGun.accuracy),
+                          Random.Range(-crosshair.GetAccuracy() - currentGun.accuracy, crosshair.GetAccuracy() + currentGun.accuracy),
+                          0), out hitInfo, currentGun.range))
         {
             GameObject clone = Instantiate(hitEffectPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
             Destroy(clone, 2f);
@@ -99,6 +108,15 @@ public class GunController : MonoBehaviour
         {
             CancelFineSight();
             StartCoroutine(ReloadCoroutine());
+        }
+    }
+
+    public void CancelReload()
+    {
+        if (isReload)
+        {
+            StopAllCoroutines();
+            isReload = false;
         }
     }
 
@@ -151,6 +169,7 @@ public class GunController : MonoBehaviour
     {
         isFineSight = !isFineSight;
         currentGun.anim.SetBool("FineSight", isFineSight);
+        crosshair.FineSightAnimation(isFineSight);
 
         if (isFineSight)
         {
@@ -224,5 +243,30 @@ public class GunController : MonoBehaviour
     {
         audioSource.clip = clip;
         audioSource.Play();
+    }
+
+    public Gun GetGun()
+    {
+        return currentGun;
+    }
+
+    public bool GetFineSight()
+    {
+        return isFineSight;
+    }
+
+    public void GunChange(Gun gun)
+    {
+        if (WeaponManager.currentWeapon != null)
+        {
+            WeaponManager.currentWeapon.gameObject.SetActive(false);
+        }
+
+        currentGun = gun;
+        WeaponManager.currentWeapon = currentGun.GetComponent<Transform>();
+        WeaponManager.currentWeaponAnim = currentGun.anim;
+
+        currentGun.transform.localPosition = Vector3.zero;
+        currentGun.gameObject.SetActive(true);
     }
 }

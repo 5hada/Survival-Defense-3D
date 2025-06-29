@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -15,9 +16,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float jumpForce;
 
+    //ป๓ลย
+    private bool isWalk = false;
     private bool isRun = false;
     private bool isCrouch = false;
     private bool isGround = true;
+
+
+    private Vector3 lastPos;
 
     [SerializeField]
     private float crouchPosY;
@@ -36,14 +42,17 @@ public class PlayerController : MonoBehaviour
     private Camera theCamera;
     private Rigidbody myRigid;
     private GunController gunController;
+    private Crosshair crosshair;
 
     void Start()
     {
         myRigid = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
         gunController = FindFirstObjectByType<GunController>();
-        applySpeed = walkSpeed;
+        crosshair = FindFirstObjectByType<Crosshair>();
+        WeaponManager.isChangeWeapon = true;
 
+        applySpeed = walkSpeed;
         originPosY = theCamera.transform.localPosition.y;
         applyCrouchPosY = originPosY;
     }
@@ -69,7 +78,8 @@ public class PlayerController : MonoBehaviour
     }
     private void IsGround()
     {
-        isGround = Physics.Raycast(transform.position, Vector3.down, capsuleCollider.bounds.extents.y + 0.1f);
+        isGround = Physics.Raycast(transform.position, Vector3.down, capsuleCollider.bounds.extents.y + 0.3f);
+        crosshair.RunningAnimation(!isGround);
     }
 
     private void Jump()
@@ -99,12 +109,14 @@ private void TryRun()
         gunController.CancelFineSight();
        
         isRun = true;
+        crosshair.RunningAnimation(isRun);
         applySpeed = runSpeed;
     }
 
     private void RunningCancel()
     {
         isRun = false;
+        crosshair.RunningAnimation(isRun);
         applySpeed = walkSpeed;
     }
 
@@ -118,7 +130,10 @@ private void TryRun()
 
     private void Crouch()
     {
+        isWalk = false;
         isCrouch = !isCrouch;
+        crosshair.CrouchingAnimation(isCrouch);
+
         if (isCrouch)
         {
             applySpeed = crouchSpeed;
@@ -161,6 +176,14 @@ private void TryRun()
         Vector3 moveVertical = transform.forward * moveDirZ;
 
         Vector3 velocity = (moveHorizontal + moveVertical).normalized * applySpeed;
+
+        if (!isRun && !isCrouch && isGround)
+        {
+            if (velocity.sqrMagnitude > 0.4f) isWalk = true;
+            else isWalk = false;
+        }
+
+        crosshair.WalkingAnimation(isWalk);
 
         myRigid.MovePosition(transform.position + velocity * Time.deltaTime);
     }
