@@ -4,6 +4,8 @@ using UnityEngine.XR;
 
 public class HandController : MonoBehaviour
 {
+    public static bool isActivate = false;
+
     [SerializeField]
     private Hand currentHand;
 
@@ -15,7 +17,10 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TryAttack();
+        if (!isActivate)
+        {
+            TryAttack();
+        }
     }
 
     private void TryAttack()
@@ -81,5 +86,6 @@ public class HandController : MonoBehaviour
 
         currentHand.transform.localPosition = Vector3.zero;
         currentHand.gameObject.SetActive(true);
+        isActivate = true;
     }
 }

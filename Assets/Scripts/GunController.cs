@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
+    public static bool isActivate = true;
+
     [SerializeField]
     private Gun currentGun;
 
@@ -39,10 +41,13 @@ public class GunController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GunFireRateCalc();
-        TryFire();
-        TryReload();
-        TryFineSight();
+        if (isActivate)
+        {
+            GunFireRateCalc();
+            TryFire();
+            TryReload();
+            TryFineSight();
+        }
     }
 
     private void GunFireRateCalc()
@@ -268,5 +273,6 @@ public class GunController : MonoBehaviour
 
         currentGun.transform.localPosition = Vector3.zero;
         currentGun.gameObject.SetActive(true);
+        isActivate = true;
     }
 }

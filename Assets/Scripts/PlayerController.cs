@@ -50,7 +50,6 @@ public class PlayerController : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider>();
         gunController = FindFirstObjectByType<GunController>();
         crosshair = FindFirstObjectByType<Crosshair>();
-        WeaponManager.isChangeWeapon = true;
 
         applySpeed = walkSpeed;
         originPosY = theCamera.transform.localPosition.y;
@@ -79,7 +78,7 @@ public class PlayerController : MonoBehaviour
     private void IsGround()
     {
         isGround = Physics.Raycast(transform.position, Vector3.down, capsuleCollider.bounds.extents.y + 0.3f);
-        crosshair.RunningAnimation(!isGround);
+        crosshair.JumpingAnimation(!isGround);
     }
 
     private void Jump()
@@ -88,7 +87,7 @@ public class PlayerController : MonoBehaviour
         myRigid.linearVelocity = transform.up* jumpForce;
     }
 
-private void TryRun()
+    private void TryRun()
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {

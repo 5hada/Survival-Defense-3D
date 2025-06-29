@@ -981,7 +981,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ed586b78c921ce45becee922ae1caf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chanfeWeaponDelayTime: 0.1
+  currentWeaponType: Gun
+  changeWeaponDelayTime: 0.1
   changeWeaponEndDelayTime: 0.1
   guns:
   - {fileID: 52257360}
@@ -989,7 +990,6 @@ MonoBehaviour:
   - {fileID: 2072073226}
   gunController: {fileID: 362737866}
   handController: {fileID: 362737865}
-  currentWeaponType: Gun
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -12470,7 +12470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3911b94be392e2b4f84658c397b0e115, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1676654837295469583, guid: 3911b94be392e2b4f84658c397b0e115, type: 3}
       propertyPath: m_Layer
@@ -12548,7 +12548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51554d99dd620454a92e75e572468bdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handName: "\uB9E8\uC190"
+  handName: TheHand
   range: 3
   damage: 1
   workSpeed: 0

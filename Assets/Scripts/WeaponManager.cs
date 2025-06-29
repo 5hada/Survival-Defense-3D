@@ -54,7 +54,7 @@ public class WeaponManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                StartCoroutine(ChangeWeaponCoroutine("Hand", "¸Ç¼Õ"));
+                StartCoroutine(ChangeWeaponCoroutine("Hand", "TheHand"));
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
@@ -86,8 +86,10 @@ public class WeaponManager : MonoBehaviour
             case "Gun":
                 gunController.CancelFineSight();
                 gunController.CancelReload();
+                GunController.isActivate = false;
                 break;
             case "Hand":
+                HandController.isActivate = false;
                 break;
         }
     }
