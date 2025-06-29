@@ -11,7 +11,7 @@ public class Gun : MonoBehaviour
     public int damage;
 
     public int reloadBulletCount;
-    public int currenBulletCount;
+    public int currentBulletCount;
     public int maxBulletCount;
     public int carryBulletCount;
 
