@@ -1,10 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-public class HandController : CloseWeaponController
+public class AxeController : CloseWeaponController
 {
 
     public static bool isActivate = false;
+    void Start()
+    {
+        //WeaponManager.currentWeapon = currentCloseWeapon.GetComponent<Transform>();
+        //WeaponManager.currentWeaponAnim = currentCloseWeapon.anim;
+    }
 
     void Update()
     {
@@ -16,6 +21,8 @@ public class HandController : CloseWeaponController
 
     protected override IEnumerator Hitcoroutine()
     {
+
+
         while (isSwing)
         {
             if (CheckObject())

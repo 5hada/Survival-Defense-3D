@@ -1,9 +1,9 @@
+using System.Reflection;
 using System.Collections;
 using UnityEngine;
 
-public class HandController : CloseWeaponController
+public class PickaxeController : CloseWeaponController
 {
-
     public static bool isActivate = false;
 
     void Update()
@@ -16,6 +16,8 @@ public class HandController : CloseWeaponController
 
     protected override IEnumerator Hitcoroutine()
     {
+
+
         while (isSwing)
         {
             if (CheckObject())
