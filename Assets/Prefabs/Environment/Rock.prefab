@@ -74,6 +74,8 @@ MonoBehaviour:
   rock: {fileID: 3275144966365131132}
   rock_Debris: {fileID: 5428677509806647248}
   effect_Prefabs: {fileID: 6021785026011883440, guid: 561f633f34aff7c45b1993aa526cc6a2, type: 3}
+  rock_Item_Prefabs: {fileID: 4345609151295398574, guid: 0febe1635e5d79149aa167807c9a2a75, type: 3}
+  count: 4
   strike_Sound: Pickaxe_Strike
   destroy_Sound: Rock_Destroy
 --- !u!1001 &2428230951757089837
