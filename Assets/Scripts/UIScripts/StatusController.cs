@@ -130,6 +130,79 @@ public class StatusController : MonoBehaviour
         images_Gauge[SATISFY].fillAmount = (float)currentSatisfy / satisfy;
     }
 
+    public void IncreaseHp(int count)
+    {
+        if (currentHp + count <= hp)
+            currentHp += count;
+        else
+            currentHp = hp;
+    }
+
+    public void DecreaseHp(int count)
+    {
+        if (currentDp >0)
+        {
+            DecreaseDp(count);
+            return;
+        }
+        currentHp -= count;
+
+        if (currentHp <= 0)
+        { 
+            currentHp = 0;
+            Debug.Log("HP 0");
+        }
+    }
+
+    public void IncreaseDp(int count)
+    {
+        if (currentDp + count <= dp)
+            currentDp += count;
+        else
+            currentDp = dp;
+    }
+
+    public void DecreaseDp(int count)
+    {
+        currentDp -= count;
+        if (currentDp <= 0)
+        {
+            currentDp = 0;
+            Debug.Log("DP 0");
+        }
+    }
+
+    public void IncreaseHungry(int count)
+    {
+        if (currentHungry + count <= hungry)
+            currentHungry += count;
+        else
+            currentHungry = hungry;
+    }
+
+    public void DecreaseHungry(int count)
+    {
+        if (currentHungry - count < 0)
+            currentHungry = 0;
+        else
+            currentHungry -= count;
+    }
+
+    public void IncreaseThirsty(int count)
+    {
+        if (currentThirsty + count <= thirsty)
+            currentThirsty += count;
+        else
+            currentThirsty = thirsty;
+    }
+
+    public void DecreaseThirsty(int count)
+    {
+        if (currentThirsty - count < 0)
+            currentThirsty = 0;
+        else
+            currentThirsty -= count;
+    }
 
     public void DecreaseStamina(int count)
     {
@@ -140,5 +213,10 @@ public class StatusController : MonoBehaviour
             currentSp -= count;
         else
             currentSp = 0;
+    }
+
+    public int GetCurrentSp()
+    {
+        return currentSp;
     }
 }
