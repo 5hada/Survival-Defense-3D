@@ -1,8 +1,9 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class Slot : MonoBehaviour
+public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     public Item item;
     public int itemCount;
@@ -13,12 +14,19 @@ public class Slot : MonoBehaviour
     [SerializeField]
     private GameObject countImage;
 
+    private WeaponManager weaponManager;
+
+    void Start()
+    {
+        weaponManager = FindAnyObjectByType<WeaponManager>();
+    }
+
     private void SetColor(float _alpha)
     {
         Color color = itemImage.color;
         color.a = _alpha;
         itemImage.color = color;
-    }    
+    }
 
     public void AddItem(Item _item, int _count = 1)
     {
@@ -27,8 +35,8 @@ public class Slot : MonoBehaviour
         itemImage.sprite = item.itemImage;
         if (item.itemType != Item.ItemType.Equipment)
         {
-        countImage.SetActive(true);
-        textCount.text = itemCount.ToString();
+            countImage.SetActive(true);
+            textCount.text = itemCount.ToString();
         }
         else
         {
@@ -58,5 +66,67 @@ public class Slot : MonoBehaviour
 
         countImage.SetActive(false);
         textCount.text = "0";
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            if (item != null)
+            {
+                if (item.itemType == Item.ItemType.Equipment)
+                {
+                    StartCoroutine(weaponManager.ChangeWeaponCoroutine(item.weaponType, item.itemName));
+                }
+                else
+                {
+                    Debug.Log(item.itemName + "»ç¿ë");
+                    SetSlotCount(-1);
+                }
+            }
+        }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (item != null)
+        {
+            DragSlot.instance.dragSlot = this;
+            DragSlot.instance.DragSetImage(itemImage);
+            DragSlot.instance.transform.position = eventData.position;
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (item != null)
+        {
+            DragSlot.instance.transform.position = eventData.position;
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        DragSlot.instance.SetColor(0f);
+        DragSlot.instance.dragSlot = null;
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        if (DragSlot.instance.dragSlot != null) 
+            ChangeSlot();
+    }
+
+    private void ChangeSlot()
+    {
+            Item tempItem = item;
+            int tempCount = itemCount;
+
+            AddItem(DragSlot.instance.dragSlot.item, DragSlot.instance.dragSlot.itemCount);
+
+        if (tempItem != null)
+            DragSlot.instance.dragSlot.AddItem(tempItem, tempCount);
+        else
+            DragSlot.instance.dragSlot.ClearSlot();
     }
 }
