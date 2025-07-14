@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
-public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     public Item item;
     public int itemCount;
@@ -16,7 +16,6 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
     private GameObject countImage;
 
     private ItemEffectDatabase itemEffectDatabase;
-    private WeaponManager weaponManager;
 
     void Start()
     {
@@ -124,5 +123,16 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
             DragSlot.instance.dragSlot.AddItem(tempItem, tempCount);
         else
             DragSlot.instance.dragSlot.ClearSlot();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (item != null)
+        itemEffectDatabase.ShowToolTip(item, transform.position);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        itemEffectDatabase.HideToolTip();
     }
 }
