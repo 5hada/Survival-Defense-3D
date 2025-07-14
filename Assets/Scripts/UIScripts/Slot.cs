@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
 public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     public Item item;
@@ -14,11 +15,12 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
     [SerializeField]
     private GameObject countImage;
 
+    private ItemEffectDatabase itemEffectDatabase;
     private WeaponManager weaponManager;
 
     void Start()
     {
-        weaponManager = FindAnyObjectByType<WeaponManager>();
+        itemEffectDatabase = FindAnyObjectByType<ItemEffectDatabase>();
     }
 
     private void SetColor(float _alpha)
@@ -74,15 +76,9 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
         {
             if (item != null)
             {
-                if (item.itemType == Item.ItemType.Equipment)
-                {
-                    StartCoroutine(weaponManager.ChangeWeaponCoroutine(item.weaponType, item.itemName));
-                }
-                else
-                {
-                    Debug.Log(item.itemName + "»ç¿ë");
-                    SetSlotCount(-1);
-                }
+                itemEffectDatabase.UseItem(item);
+                if (item.itemType == Item.ItemType.Used)
+                SetSlotCount(-1);
             }
         }
     }
